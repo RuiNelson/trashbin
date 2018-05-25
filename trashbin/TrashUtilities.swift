@@ -9,28 +9,32 @@
 import Foundation
 
 func trashBinContents() -> [String] {
-    let trashDirectory = "~/.Trash/*"
-    return glob(pattern: trashDirectory)
+    let trashHome = glob(pattern: "~/.Trash/*")
+    let trashVolumes = glob(pattern: "/Volumes/*/.Trashes/*")
+    
+    return [trashHome, trashVolumes].flatMap({ (s) -> [String] in
+        return s
+    })
 }
 
 func listTrashBin() {
-    total = 0
+    var total: Int64 = 0
     let contents = trashBinContents()
 
-    print("Listing Trash of " + currentUser)
+    print("Listing trash contents")
     for content in contents {
         var size: Int64?
-
+        
         if showSize {
             size = fileManager.sizeOfItem(atPath: content)
-            total += size!
+            total += size ?? 0
         }
 
         fileInfoPrint(path: content, size: size)
     }
 
     if showSize {
-        print("Total in trash: " + bcf.string(fromByteCount: total))
+        print("Total in trash: \(bcf.string(fromByteCount: total))")
     }
 }
 
@@ -39,25 +43,18 @@ func emptyTrash() {
     directories = true
     recursive = true
 
-    total = 0
+    var total: Int64 = 0
     let contents = trashBinContents()
 
-    print ("Emptying Trash of " + currentUser + "...")
+    print ("Emptying trash...")
 
     for content in contents {
-        var size: Int64?
-
-        if showSize {
-            size = fileManager.sizeOfItem(atPath: content)
-            total += size!
-        }
-
         let url = URL(fileURLWithPath: content)
 
-        trash(url)
+        total += trash(url)
     }
 
     if showSize {
-        print("Total freed: " + bcf.string(fromByteCount: total))
+        print("Total freed: \(bcf.string(fromByteCount: total))")
     }
 }

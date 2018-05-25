@@ -18,15 +18,12 @@ let bcf = ByteCountFormatter()
 bcf.allowedUnits = [ByteCountFormatter.Units.useAll]
 bcf.countStyle = ByteCountFormatter.CountStyle.file
 
-var total: Int64 = 0
-
 processOptions()
 
 let fileUrls = processInputFiles()
-trash(fileUrls)
 
-if showSize && !fileUrls.isEmpty {
-    print("Total \(actionPast): " + bcf.string(fromByteCount: total))
+if !fileUrls.isEmpty {
+    trash(fileUrls)
 }
 
 if listTrash {

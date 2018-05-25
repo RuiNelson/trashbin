@@ -9,6 +9,8 @@
 import Foundation
 
 func trash(_ urls: [URL]) {
+    var total : Int64 = 0
+    
     for url in urls {
         switch checkFile(url) {
         case .doesntExist:
@@ -16,15 +18,15 @@ func trash(_ urls: [URL]) {
                 printError("\(url.path): No such file or directory")
             }
         case .isFile:
-            trash(url)
+            total += trash(url)
         case .isDirectory:
             if directories {
                 if recursive {
-                    trash(url)
+                    total += trash(url)
                 } else {
                     if let isEmpty = fileManager.isDirectoryEmpty(atPath: url.path) {
                         if isEmpty {
-                            trash(url)
+                            total += trash(url)
                         } else {
                             printError("\(url.path): Directory not empty")
                         }
@@ -35,9 +37,13 @@ func trash(_ urls: [URL]) {
             }
         }
     }
+    
+    if showSize {
+        print("\(actionPast.capitalized) \(bcf.string(fromByteCount: total))")
+    }
 }
 
-func trash(_ url: URL) {
+func trash(_ url: URL) -> Int64 {
     let path = url.path
     var userConfirm = false
     let check: CheckTrashResult = checkTrash(url)
@@ -78,7 +84,6 @@ func trash(_ url: URL) {
 
             if showSize {
                 size = fileManager.sizeOfItem(atPath: path)
-                total += size!
             }
 
             if verbose {
@@ -87,16 +92,20 @@ func trash(_ url: URL) {
 
             if unlink {
                 try fileManager.removeItem(at: url)
+                return size ?? 0
             } else {
                 try fileManager.trashItem(at: url, resultingItemURL: nil)
+                return size ?? 0
             }
 
         } catch {
             let desc = error.localizedDescription
             printError("Could not \(actionPresent) \(path), because: \(desc)")
+            return 0
         }
     } else {
         print("\(path) not \(actionPast)")
+        return 0
     }
 
 }
