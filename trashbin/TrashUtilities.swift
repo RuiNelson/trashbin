@@ -5,10 +5,15 @@ import Foundation
 func trashBinContents() -> [String] {
 	let trashHome = glob(pattern: "~/.Trash/*")
 	let trashVolumes = glob(pattern: "/Volumes/*/.Trashes/*/*")
-
-	return [trashHome, trashVolumes].flatMap({ (s) -> [String] in
-		return s
-	})
+	let trashiCloud = glob(pattern: "~/Library/Mobile Documents/com~apple~CloudDocs/.Trash")
+	
+	let allTrashes = [trashHome, trashVolumes, trashiCloud]
+	
+	let flatAllTrashes = allTrashes.flatMap { (path) -> [String] in
+		return path
+	}
+	
+	return flatAllTrashes
 }
 
 func listTrashBin() {
