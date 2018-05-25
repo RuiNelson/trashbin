@@ -1,5 +1,5 @@
 //
-//  trash.swift
+//  Trash.swift
 //  trashbin
 //
 //  Created by Rui Nelson Carneiro on 21/05/18.
@@ -9,8 +9,8 @@
 import Foundation
 
 func trash(_ urls: [URL]) {
-	var total : Int64 = 0
-	
+	var total: Int64 = 0
+
 	for url in urls {
 		switch checkFile(url) {
 		case .doesntExist:
@@ -37,7 +37,7 @@ func trash(_ urls: [URL]) {
 			}
 		}
 	}
-	
+
 	if showSize {
 		print("\(actionPast.capitalized) \(bcf.string(fromByteCount: total))")
 	}
@@ -47,7 +47,7 @@ func trash(_ url: URL) -> Int64 {
 	let path = url.path
 	var userConfirm = false
 	let check: CheckTrashResult = checkTrash(url)
-	
+
 	if !force {
 		//-f not used, ask if the user really wants to delete file if not a regular file
 		switch check {
@@ -66,7 +66,7 @@ func trash(_ url: URL) -> Int64 {
 		//user has forced, no need for confirmation
 		userConfirm = true
 	}
-	
+
 	if interactive && check == .noAttentionNeeded {
 		switch check {
 		case .noAttentionNeeded:
@@ -77,19 +77,19 @@ func trash(_ url: URL) -> Int64 {
 			userConfirm = true // already asked, no need to ask again
 		}
 	}
-	
+
 	if userConfirm {
 		do {
 			var size: Int64?
-			
+
 			if showSize {
 				size = fileManager.sizeOfItem(atPath: path)
 			}
-			
+
 			if verbose {
 				fileInfoPrint(path: path, size: size)
 			}
-			
+
 			if unlink {
 				try fileManager.removeItem(at: url)
 				return size ?? 0
@@ -97,15 +97,15 @@ func trash(_ url: URL) -> Int64 {
 				try fileManager.trashItem(at: url, resultingItemURL: nil)
 				return size ?? 0
 			}
-			
+
 		} catch {
 			let desc = error.localizedDescription
-			printError("Could not \(actionPresent) \(path), because: \(desc)")
+			printError("Could not \(actionPresent) \(path): \(desc)")
 			return 0
 		}
 	} else {
 		print("\(path) not \(actionPast)")
 		return 0
 	}
-	
+
 }

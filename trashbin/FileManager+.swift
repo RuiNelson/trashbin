@@ -9,7 +9,7 @@
 import Foundation
 
 extension FileManager {
-	
+
 	func isDirectory(atPath: String) -> Bool {
 		var check: ObjCBool = false
 		if fileExists(atPath: atPath, isDirectory: &check) {
@@ -18,14 +18,14 @@ extension FileManager {
 			return false
 		}
 	}
-	
+
 	func isDirectoryEmpty(atPath: String) -> Bool? {
 		if let contents = try? contentsOfDirectory(atPath: atPath) {
 			return contents.isEmpty
 		}
 		return nil
 	}
-	
+
 	func ownerOfItem(atPath: String) -> String? {
 		if let attributes = try? attributesOfItem(atPath: atPath) {
 			if let owner = attributes[FileAttributeKey.ownerAccountName] as? String {
@@ -34,7 +34,7 @@ extension FileManager {
 		}
 		return nil
 	}
-	
+
 	enum PosixPermission: Int {
 		case ownerReadable      = 0b100000000
 		case ownerWritable      = 0b010000000
@@ -46,7 +46,7 @@ extension FileManager {
 		case allWriable         = 0b000000010
 		case allExecutable      = 0b000000001
 	}
-	
+
 	func permissionOfItem(atPath: String, permission: PosixPermission) -> Bool? {
 		if let attributes = try? attributesOfItem(atPath: atPath) {
 			if let posixPermissions = attributes[FileAttributeKey.posixPermissions] as? Int {
@@ -55,12 +55,12 @@ extension FileManager {
 		}
 		return nil
 	}
-	
+
 	func sizeOfFile(atPath: String) -> Int64 {
 		guard isDirectory(atPath: atPath) == false else {
 			return 0
 		}
-		
+
 		if let attributes = try? attributesOfItem(atPath: atPath) {
 			if let size = attributes[FileAttributeKey.size] as? Int64 {
 				return size
@@ -68,26 +68,26 @@ extension FileManager {
 		}
 		return 0
 	}
-	
+
 	func sizeOfDirectory(atPath: String) -> Int64 {
 		if let children = try? subpathsOfDirectory(atPath: atPath) {
-			
+
 			let childrenFullPaths: [String] = children.map { (child) -> String in
 				return atPath + "/" + child
 			}
-			
+
 			var totalSize: Int64 = 0
-			
+
 			for child in childrenFullPaths {
 				let fileSize = sizeOfFile(atPath: child)
 				totalSize += fileSize
 			}
-			
+
 			return totalSize
 		}
 		return 0
 	}
-	
+
 	func sizeOfItem(atPath: String) -> Int64 {
 		if isDirectory(atPath: atPath) {
 			return sizeOfDirectory(atPath: atPath)
@@ -95,5 +95,5 @@ extension FileManager {
 			return sizeOfFile(atPath: atPath)
 		}
 	}
-	
+
 }
