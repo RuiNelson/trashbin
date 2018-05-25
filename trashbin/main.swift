@@ -3,7 +3,7 @@
 //  trashbin
 //
 //  Created by Rui Nelson Carneiro on 21/05/18.
-//  Copyright © 2018 Rui Nelson Carneiro. All rights reserved.
+//  Copyright © 2018 Rui Nelson Magalhães Carneiro. All rights reserved.
 //
 
 import Foundation
@@ -23,13 +23,13 @@ processOptions()
 let fileUrls = processInputFiles()
 
 if !fileUrls.isEmpty {
-    trash(fileUrls)
+	trash(fileUrls)
 }
 
 if listTrash {
-    listTrashBin()
+	listTrashBin()
 }
 
 if emptyOut {
-    emptyTrash()
+	emptyTrash()
 }
