@@ -30,7 +30,7 @@ if showSize && !fileUrls.isEmpty {
 }
 
 if listTrash {
- listTrashBin()
+    listTrashBin()
 }
 
 if emptyOut {
