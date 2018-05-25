@@ -21,7 +21,7 @@ var showSize = false
 var listTrash = false
 
 var actionPresent: String {
-	return unlink ? "delete" : "deleted"
+	return unlink ? "delete" : "trash"
 }
 
 var actionPast: String {
@@ -62,7 +62,7 @@ func processOptions() {
 			exit(-1)
 		}
 	}
-	
+
 	checkUnsupportedOptions()
 }
 
