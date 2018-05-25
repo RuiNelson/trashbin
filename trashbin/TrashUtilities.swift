@@ -5,7 +5,7 @@ import Foundation
 func trashBinContents() -> [String] {
 	let trashHome = glob(pattern: "~/.Trash/*")
 	let trashVolumes = glob(pattern: "/Volumes/*/.Trashes/*/*")
-	let trashiCloud = glob(pattern: "~/Library/Mobile Documents/com~apple~CloudDocs/.Trash")
+	let trashiCloud = glob(pattern: "~/Library/Mobile Documents/com~apple~CloudDocs/.Trash/*")
 	
 	let allTrashes = [trashHome, trashVolumes, trashiCloud]
 	
