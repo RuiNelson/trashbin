@@ -62,7 +62,7 @@ func processOptions() {
             exit(-1)
         }
     }
-    
+
     checkUnsupportedOptions()
 }
 

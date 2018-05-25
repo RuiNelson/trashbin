@@ -41,7 +41,7 @@ func trash(_ url: URL) {
     let path = url.path
     var userConfirm = false
     let check: CheckTrashResult = checkTrash(url)
-    
+
     if !force {
         //-f not used, ask if the user really wants to delete file if not a regular file
         switch check {
@@ -60,7 +60,7 @@ func trash(_ url: URL) {
         //user has forced, no need for confirmation
         userConfirm = true
     }
-    
+
     if interactive && check == .noAttentionNeeded {
         switch check {
         case .noAttentionNeeded:
@@ -71,26 +71,26 @@ func trash(_ url: URL) {
             userConfirm = true // already asked, no need to ask again
         }
     }
-    
+
     if userConfirm {
         do {
             var size: Int64?
-            
+
             if showSize {
                 size = fileManager.sizeOfItem(atPath: path)
                 total += size!
             }
-            
-            if (verbose) {
+
+            if verbose {
                 fileInfoPrint(path: path, size: size)
             }
-            
+
             if unlink {
                 try fileManager.removeItem(at: url)
             } else {
                 try fileManager.trashItem(at: url, resultingItemURL: nil)
             }
-            
+
         } catch {
             let desc = error.localizedDescription
             printError("Could not \(actionPresent) \(path), because: \(desc)")
@@ -98,5 +98,5 @@ func trash(_ url: URL) {
     } else {
         print("\(path) not \(actionPast)")
     }
-    
+
 }
