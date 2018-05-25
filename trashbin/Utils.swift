@@ -54,12 +54,19 @@ func glob(pattern: String, globFlags: Int32) -> [String] {
 	return result
 }
 
-func fileInfoPrint(path: String, size: Int64?) {
-	guard let size = size else {
-		print(path)
-		return
+func fileInfoPrint(path: String, size: Int64?, emoji: String? = nil) {
+	var line = ""
+	
+	if let emoji = emoji {
+		line += emoji + " "
 	}
-
-	let humanReadable = bcf.string(fromByteCount: size)
-	print(path + " (" + humanReadable + ")")
+	
+	line += path
+	
+	if let fileSize = size {
+		line += " "
+		line += "(" + bcf.string(fromByteCount: fileSize) + ")"
+	}
+	
+	print(line)
 }

@@ -33,7 +33,7 @@ func trash(_ urls: [URL]) {
 	}
 
 	if showSize {
-		print("\(actionPast.capitalized) \(bcf.string(fromByteCount: total))")
+		print("\(actionPast.capitalized): \(bcf.string(fromByteCount: total))")
 	}
 }
 
@@ -81,7 +81,7 @@ func trash(_ url: URL) -> Int64 {
 			}
 
 			if verbose {
-				fileInfoPrint(path: path, size: size)
+				fileInfoPrint(path: path, size: size, emoji: (unlink ? "🔗" : "🗑 "))
 			}
 
 			if unlink {
