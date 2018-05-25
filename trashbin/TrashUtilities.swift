@@ -1,10 +1,4 @@
-//
-//  TrashUtilities.swift
-//  trashbin
-//
-//  Created by Rui Nelson Carneiro on 24/05/18.
 //  Copyright © 2018 Rui Nelson Magalhães Carneiro. All rights reserved.
-//
 
 import Foundation
 

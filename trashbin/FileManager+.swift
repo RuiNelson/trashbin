@@ -1,10 +1,4 @@
-//
-//  FileManager+.swift
-//  trashbin
-//
-//  Created by Rui Nelson Carneiro on 23/05/18.
 //  Copyright © 2018 Rui Nelson Magalhães Carneiro. All rights reserved.
-//
 
 import Foundation
 
