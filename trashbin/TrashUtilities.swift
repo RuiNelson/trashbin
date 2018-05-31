@@ -20,7 +20,7 @@ func listTrashBin() {
 	var total: Int64 = 0
 	let contents = trashBinContents()
 
-	print("Listing trash contents")
+	print(contents.isEmpty ? "Trash is empty" : "Listing trash contents")
 	for content in contents {
 		var size: Int64?
 
