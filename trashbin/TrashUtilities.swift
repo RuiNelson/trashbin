@@ -45,7 +45,7 @@ func emptyTrash() {
 	var total: Int64 = 0
 	let contents = trashBinContents()
 
-	print ("Emptying trash...")
+	print ("Emptying the trash...")
 
 	for content in contents {
 		let url = URL(fileURLWithPath: content)
@@ -54,6 +54,6 @@ func emptyTrash() {
 	}
 
 	if showSize {
-		print("Total freed: \(bcf.string(fromByteCount: total))")
+		print("Total unlinked: \(bcf.string(fromByteCount: total))")
 	}
 }
