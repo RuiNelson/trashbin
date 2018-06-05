@@ -4,11 +4,18 @@ import Foundation
 import Darwin
 
 func printError(_ message: String) {
-	fputs(programName + ": " + message + "\n", stderr)
+	fputs("🛑 " + programName + ": " + message + "\n", stderr)
 }
 
+var alwaysYes = false
 func promptYesOrNo(question: String) -> Bool {
-	print("\(programName): \(question)")
+	print("⚠️ \(question) " + (alwaysYes ? "" : "[Y/N/A]"))
+	
+	if alwaysYes {
+		print("Yes")
+		return true
+	}
+	
 	var reply: String? = nil
 
 	while reply == nil {
@@ -17,8 +24,10 @@ func promptYesOrNo(question: String) -> Bool {
 			switch rLower {
 			case "y": return true
 			case "n": return false
+			case "a": alwaysYes = true
+				return true
 			default:
-				print("Invalid answer, reply with Y or N. \(question)")
+				print("Invalid answer, reply with Y (yes), N (no) or A (always yes). \(question)")
 				reply = nil
 			}
 		}
