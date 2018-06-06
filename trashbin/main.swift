@@ -2,7 +2,7 @@
 
 import Foundation
 
-let programName = "trashbin"
+let programName = CommandLine.arguments.first!
 
 // print(CommandLine.arguments.first!)
 

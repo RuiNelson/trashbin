@@ -9,18 +9,23 @@ func trashBinContents() -> [String] {
 	
 	let allTrashes = [trashHome, trashVolumes, trashiCloud]
 	
-	let flatAllTrashes = allTrashes.flatMap { (path) -> [String] in
+	let flat = allTrashes.flatMap { (path) -> [String] in
 		return path
 	}
 	
-	return flatAllTrashes
+	return flat
 }
 
 func listTrashBin() {
 	var total: Int64 = 0
 	let contents = trashBinContents()
-
-	print(contents.isEmpty ? "Trash is empty" : "Listing trash contents")
+	
+	if contents.isEmpty {
+		print("Trash is empty")
+		return
+	}
+	
+	print("Trash contents:")
 	for content in contents {
 		var size: Int64?
 
@@ -45,8 +50,12 @@ func emptyTrash() {
 	var total: Int64 = 0
 	let contents = trashBinContents()
 
+	if contents.isEmpty {
+		printError("Trash is already empty")
+		return
+	}
+	
 	print ("Emptying the trash...")
-
 	for content in contents {
 		let url = URL(fileURLWithPath: content)
 

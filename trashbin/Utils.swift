@@ -27,7 +27,7 @@ func promptYesOrNo(question: String) -> Bool {
 			case "a": alwaysYes = true
 				return true
 			default:
-				print("Invalid answer, reply with Y (yes), N (no) or A (always yes). \(question)")
+				print("Invalid answer, reply with Y (yes), N (no) or A (always yes)\n\(question)")
 				reply = nil
 			}
 		}

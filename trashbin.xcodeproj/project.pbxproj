@@ -113,6 +113,7 @@
 				TargetAttributes = {
 					5284B51E20B2DE800024E186 = {
 						CreatedOnToolsVersion = 9.3.1;
+						LastSwiftMigration = 1000;
 					};
 				};
 			};
@@ -271,7 +272,7 @@
 				DEVELOPMENT_TEAM = 98DYJ8BJ46;
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -282,7 +283,7 @@
 				DEVELOPMENT_TEAM = 98DYJ8BJ46;
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};
