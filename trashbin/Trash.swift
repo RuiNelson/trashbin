@@ -93,8 +93,7 @@ func trash(_ url: URL) -> Int64 {
 			}
 
 		} catch {
-			let desc = error.localizedDescription
-			printError("Could not \(actionPresent) \(path): \(desc)")
+			printError(error.localizedDescription)
 			return 0
 		}
 	} else {
