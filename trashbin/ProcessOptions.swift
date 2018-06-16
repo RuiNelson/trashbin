@@ -69,4 +69,8 @@ func checkUnsupportedOptions() {
 		printError("Sorry, but this utility has no support of overwriting files, they are sent to the trash")
 		exit(-1)
 	}
+	if (interactive && force) {
+		printError("Options 'interactive' and 'force' are mutually exclusive.")
+		exit(-1)
+	}
 }
