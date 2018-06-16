@@ -21,7 +21,7 @@ let fileUrls = processInputFiles()
 if !fileUrls.isEmpty {
 	trash(fileUrls)
 }
-else if (!listTrash || !emptyOut) {
+else if (!listTrash && !emptyOut) {
 	print("Usage: \(programName) [-f | -i] [-dRrsvW] file ... [-el]")
 	print("       send files to the trash (or unlink them with the u option)")
 }
