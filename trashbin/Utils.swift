@@ -3,6 +3,12 @@
 import Foundation
 import Darwin
 
+extension Character {
+	var lowerCased : Character {
+		return self.description.lowercased().first!
+	}
+}
+
 func printError(_ message: String) {
 	fputs("🛑 " + programName + ": " + message + "\n", stderr)
 }
@@ -24,8 +30,8 @@ func promptYesOrNo(question: String) -> Bool {
 
 	while reply == nil {
 		reply = readLine()
-		if let rLower = reply?.lowercased() {
-			switch rLower {
+		if let rFirst = reply?.first {
+			switch rFirst.lowerCased {
 			case "y": return true
 			case "n": return false
 			case "a": alwaysYes = true
