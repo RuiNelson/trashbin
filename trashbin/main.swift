@@ -22,8 +22,13 @@ if !fileUrls.isEmpty {
 	trash(fileUrls)
 }
 else if (!listTrash && !emptyOut) {
-	print("Usage: \(programName) [-f | -i] [-dRrsvW] file ... [-el]")
-	print("       send files to the trash (or unlink them with the u option)")
+	if fileUrls.isEmpty {
+		printWarning("No files found matching criteria.")
+	}
+	else {
+		printWarning("Usage: \(programName) [-f | -i] [-dRrsvW] file ... [-el]")
+		print("       send files to the trash (or unlink them with the u option)")
+	}
 }
 
 if listTrash {
