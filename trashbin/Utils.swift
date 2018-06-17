@@ -7,9 +7,13 @@ func printError(_ message: String) {
 	fputs("🛑 " + programName + ": " + message + "\n", stderr)
 }
 
+func printWarning(_ mesage : String) {
+	print("⚠️ " + mesage)
+}
+
 var alwaysYes = false
 func promptYesOrNo(question: String) -> Bool {
-	print("⚠️ \(question) " + (alwaysYes ? "" : "[Y/N/A]"))
+	fputs("⚠️ \(question) " + (alwaysYes ? "" : "[Y/N/A] "), stdout)
 	
 	if alwaysYes {
 		print("Yes")
