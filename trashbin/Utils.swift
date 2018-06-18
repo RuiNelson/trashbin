@@ -19,12 +19,8 @@ func printWarning(_ mesage : String) {
 
 var alwaysYes = false
 func promptYesOrNo(question: String) -> Bool {
-	fputs("⚠️ \(question) " + (alwaysYes ? "" : "[Y/N/A] "), stdout)
+	fputs("⚠️ \(question) " + (alwaysYes ? "Yes\n\r" : "[Y/N/A] "), stdout)
 	
-	if alwaysYes {
-		print("Yes")
-		return true
-	}
 	
 	var reply: String? = nil
 
