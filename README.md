@@ -16,9 +16,8 @@ command line.
 
 ## Description
 
-The `trashbin` utility attempts to trash the non-directory type files specified on the command
-line.  If the permissions of the file do not permit writing, and the standard input device is a
-terminal, the user is prompted (on the standard output) for confirmation.
+The `trashbin` utility attempts to trash the non-directory type files specified on the command line.  If the
+permissions of the file do not permit writing, the user is prompted (on the standard output) for confirmation.
 
 The options are as follows:
 
