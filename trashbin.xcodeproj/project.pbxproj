@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		520F92F820B6F907007E6B55 /* TrashUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 520F92F720B6F907007E6B55 /* TrashUtilities.swift */; };
+		520F92F820B6F907007E6B55 /* ListAndEmpty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 520F92F720B6F907007E6B55 /* ListAndEmpty.swift */; };
 		523BEF8020B3330C0001EF4E /* ProcessFiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523BEF7F20B3330C0001EF4E /* ProcessFiles.swift */; };
 		523BEF8220B3338F0001EF4E /* Trash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523BEF8120B3338F0001EF4E /* Trash.swift */; };
 		5284B52320B2DE810024E186 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5284B52220B2DE810024E186 /* main.swift */; };
@@ -29,7 +29,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		520F92F720B6F907007E6B55 /* TrashUtilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrashUtilities.swift; sourceTree = "<group>"; };
+		520F92F720B6F907007E6B55 /* ListAndEmpty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListAndEmpty.swift; sourceTree = "<group>"; };
 		523BEF7F20B3330C0001EF4E /* ProcessFiles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessFiles.swift; sourceTree = "<group>"; };
 		523BEF8120B3338F0001EF4E /* Trash.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trash.swift; sourceTree = "<group>"; };
 		5284B51F20B2DE810024E186 /* trashbin */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = trashbin; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -74,7 +74,7 @@
 				5284B53120B307340024E186 /* ProcessOptions.swift */,
 				523BEF7F20B3330C0001EF4E /* ProcessFiles.swift */,
 				523BEF8120B3338F0001EF4E /* Trash.swift */,
-				520F92F720B6F907007E6B55 /* TrashUtilities.swift */,
+				520F92F720B6F907007E6B55 /* ListAndEmpty.swift */,
 				5284B53320B3108C0024E186 /* Utils.swift */,
 				52CC9E3C20B52151009FD25E /* FileManager+.swift */,
 			);
@@ -141,7 +141,7 @@
 			files = (
 				523BEF8220B3338F0001EF4E /* Trash.swift in Sources */,
 				523BEF8020B3330C0001EF4E /* ProcessFiles.swift in Sources */,
-				520F92F820B6F907007E6B55 /* TrashUtilities.swift in Sources */,
+				520F92F820B6F907007E6B55 /* ListAndEmpty.swift in Sources */,
 				5284B53220B307340024E186 /* ProcessOptions.swift in Sources */,
 				52CC9E3D20B52151009FD25E /* FileManager+.swift in Sources */,
 				5284B52320B2DE810024E186 /* main.swift in Sources */,

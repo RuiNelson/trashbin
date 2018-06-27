@@ -49,12 +49,14 @@ func trash(_ url: URL) -> Int64 {
 			userConfirm = true
 		case .ownedBySomeoneElse(by: let owner):
 			if NSUserName() != "root" {
-				userConfirm = promptYesOrNo(question: "\(path) is owned by \(owner), \(actionPresent) anyway?", questionType: .differentOwner)
+				userConfirm = promptYesOrNo(question: "\(path) is owned by \(owner), \(actionPresent) anyway?",
+					questionType: .differentOwner)
 			} else {
 				userConfirm = true
 			}
 		case .readOnly:
-			userConfirm = promptYesOrNo(question: "File \(path) is read-only, \(actionPresent) anyway?", questionType: .readOnly)
+			userConfirm = promptYesOrNo(question: "File \(path) is read-only, \(actionPresent) anyway?",
+				questionType: .readOnly)
 		}
 	} else {
 		//user has forced, no need for confirmation
@@ -65,7 +67,8 @@ func trash(_ url: URL) -> Int64 {
 		switch check {
 		case .noAttentionNeeded:
 			if userConfirm {
-				userConfirm = promptYesOrNo(question: "\(actionPresent.capitalized) \(path)?", questionType: .promptDeletion)
+				userConfirm = promptYesOrNo(question: "\(actionPresent.capitalized) \(path)?",
+					questionType: .promptDeletion)
 			}
 		default:
 			userConfirm = true // already asked, no need to ask again
@@ -81,7 +84,9 @@ func trash(_ url: URL) -> Int64 {
 			}
 
 			if verbose {
-				fileInfoPrint(path: path, size: size, emoji: (unlink ? "🔗" : "🗑 "))
+				fileInfoPrint(path: path,
+							  size: size,
+							  emoji: (unlink ? "🔗" : "🗑 "))
 			}
 
 			if unlink {

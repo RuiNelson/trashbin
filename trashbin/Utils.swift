@@ -21,12 +21,12 @@ enum QuestionType : Int {
 	case differentOwner, readOnly, promptDeletion
 }
 
-var alwaysYes : [QuestionType:Bool] = [:]
+var alwaysYesForQuestionType : Set<QuestionType> = []
 
 func promptYesOrNo(question: String, questionType: QuestionType) -> Bool {
 	fputs("⚠️ \(question) " + (" [Y/N/A] "), stdout)
 	
-	if alwaysYes[questionType] ?? false {
+	if alwaysYesForQuestionType.contains(questionType) {
 		print("Y")
 		return true
 	}
@@ -40,7 +40,7 @@ func promptYesOrNo(question: String, questionType: QuestionType) -> Bool {
 			switch rFirst.lowerCased {
 			case "y": return true
 			case "n": return false
-			case "a": alwaysYes[questionType] = true
+			case "a": alwaysYesForQuestionType.insert(questionType)
 				return true
 			default:
 				print("Invalid answer, reply with Y (yes), N (no) or A (always yes)\n\(question)")

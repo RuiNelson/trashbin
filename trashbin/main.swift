@@ -41,7 +41,7 @@ if !fileUrls.isEmpty {
 }
 else if (!listTrash && !emptyOut) {
 	if fileUrls.isEmpty {
-		printWarning("No files found matching criteria.")
+		printWarning("No files found matching criteria or no files speccified.")
 	}
 	else {
 		print("Usage: \(programName) [-f | -i] [-dRrsvW] file ... [-el]")

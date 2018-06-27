@@ -9,9 +9,7 @@ func trashBinContents() -> [String] {
 	
 	let allTrashes = [trashHome, trashVolumes, trashiCloud]
 	
-	let flat = allTrashes.flatMap { (path) -> [String] in
-		return path
-	}
+	let flat = allTrashes.flatMap { return $0 }
 	
 	return flat
 }
