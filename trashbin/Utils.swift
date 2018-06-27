@@ -17,9 +17,19 @@ func printWarning(_ mesage : String) {
 	print("⚠️ " + mesage)
 }
 
-var alwaysYes = false
-func promptYesOrNo(question: String) -> Bool {
-	fputs("⚠️ \(question) " + (alwaysYes ? "Yes\n\r" : "[Y/N/A] "), stdout)
+enum QuestionType : Int {
+	case differentOwner, readOnly, promptDeletion
+}
+
+var alwaysYes : [QuestionType:Bool] = [:]
+
+func promptYesOrNo(question: String, questionType: QuestionType) -> Bool {
+	fputs("⚠️ \(question) " + (" [Y/N/A] "), stdout)
+	
+	if alwaysYes[questionType] ?? false {
+		print("Y")
+		return true
+	}
 	
 	
 	var reply: String? = nil
@@ -30,7 +40,7 @@ func promptYesOrNo(question: String) -> Bool {
 			switch rFirst.lowerCased {
 			case "y": return true
 			case "n": return false
-			case "a": alwaysYes = true
+			case "a": alwaysYes[questionType] = true
 				return true
 			default:
 				print("Invalid answer, reply with Y (yes), N (no) or A (always yes)\n\(question)")

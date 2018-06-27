@@ -40,7 +40,7 @@ func trash(_ urls: [URL]) {
 func trash(_ url: URL) -> Int64 {
 	let path = url.path
 	var userConfirm = false
-	let check: CheckTrashResult = checkTrash(url)
+	let check: CheckPreTrashResult = checkPreTrash(url)
 
 	if !force {
 		//-f not used, ask if the user really wants to delete file if not a regular file
@@ -48,13 +48,13 @@ func trash(_ url: URL) -> Int64 {
 		case .noAttentionNeeded:
 			userConfirm = true
 		case .ownedBySomeoneElse(by: let owner):
-			if currentUser != "root" {
-				userConfirm = promptYesOrNo(question: "\(path) is owned by \(owner), \(actionPresent) anyway?")
+			if NSUserName() != "root" {
+				userConfirm = promptYesOrNo(question: "\(path) is owned by \(owner), \(actionPresent) anyway?", questionType: .differentOwner)
 			} else {
 				userConfirm = true
 			}
 		case .readOnly:
-			userConfirm = promptYesOrNo(question: "File \(path) is read-only, \(actionPresent) anyway?")
+			userConfirm = promptYesOrNo(question: "File \(path) is read-only, \(actionPresent) anyway?", questionType: .readOnly)
 		}
 	} else {
 		//user has forced, no need for confirmation
@@ -65,7 +65,7 @@ func trash(_ url: URL) -> Int64 {
 		switch check {
 		case .noAttentionNeeded:
 			if userConfirm {
-				userConfirm = promptYesOrNo(question: "\(actionPresent.capitalized) \(path)?")
+				userConfirm = promptYesOrNo(question: "\(actionPresent.capitalized) \(path)?", questionType: .promptDeletion)
 			}
 		default:
 			userConfirm = true // already asked, no need to ask again

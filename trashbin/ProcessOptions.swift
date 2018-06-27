@@ -53,7 +53,7 @@ func processOptions() {
 			undelete = true
 		default:
 			printError("Unknown option")
-			exit(-1)
+			ExitCodes.unknownOption.exit()
 		}
 	}
 
@@ -63,14 +63,14 @@ func processOptions() {
 func checkUnsupportedOptions() {
 	if undelete {
 		printError("Sorry, but this utility can't undelete files. You can use your macOS's trash bin to do that.")
-		exit(-1)
+		ExitCodes.unsupportedOption.exit()
 	}
 	if overwrite {
 		printError("Sorry, but this utility has no support of overwriting files, they are sent to the trash")
-		exit(-1)
+		ExitCodes.unsupportedOption.exit()
 	}
 	if (interactive && force) {
 		printError("Options 'interactive' and 'force' are mutually exclusive.")
-		exit(-1)
+		ExitCodes.mutualExclusiveOptions.exit()
 	}
 }

@@ -3,6 +3,16 @@
 import Foundation
 import Darwin
 
+enum FileCheckResult {
+	case doesntExist, isFile, isDirectory
+}
+
+enum CheckPreTrashResult: Equatable {
+	case noAttentionNeeded
+	case ownedBySomeoneElse(by: String)
+	case readOnly
+}
+
 func processInputFiles() -> [URL] {
 	let currentPath = fileManager.currentDirectoryPath
 	let currentPathURL = URL(fileURLWithPath: currentPath, isDirectory: true)
@@ -11,21 +21,17 @@ func processInputFiles() -> [URL] {
 		return argument.first != "-"
 	}
 
-	let globs: [[String]] = files.map { (unglobbed) -> [String] in
-		return glob(pattern: unglobbed)
+	let globs: [[String]] = files.map { (file) -> [String] in
+		return glob(pattern: file)
 	}
 
 	let flatGlobs: [String] = globs.flatMap { $0 }
 
-	let filesUrlsArray: [URL] = flatGlobs.map { (file) -> URL in
-		return URL(fileURLWithPath: file, relativeTo: currentPathURL)
+	let filesUrlsArray: [URL] = flatGlobs.map { (filePath) -> URL in
+		return URL(fileURLWithPath: filePath, relativeTo: currentPathURL)
 	}
 
 	return filesUrlsArray
-}
-
-enum FileCheckResult {
-	case doesntExist, isFile, isDirectory
 }
 
 func checkFile(_ url: URL) -> FileCheckResult {
@@ -40,16 +46,9 @@ func checkFile(_ url: URL) -> FileCheckResult {
 	}
 }
 
-enum CheckTrashResult: Equatable {
-
-	case noAttentionNeeded
-	case ownedBySomeoneElse(by: String)
-	case readOnly
-
-}
-
-func checkTrash(_ url: URL) -> CheckTrashResult {
+func checkPreTrash(_ url: URL) -> CheckPreTrashResult {
 	let path = url.path
+	let currentUser = NSUserName()
 
 	// check ownership
 	if let owner = fileManager.ownerOfItem(atPath: path) {
