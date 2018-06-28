@@ -28,6 +28,14 @@ processOptions()
 
 let fileUrls = processInputFiles()
 
+if !fileUrls.isEmpty {
+	trash(fileUrls)
+}
+else if (!listTrash && !emptyOut && !userDidInputFiles) {
+	print("Usage: \(programName) [-f | -i] [-dRrsvW] file ... [-el]")
+	print("       send files to macOS trash (or unlink)")
+}
+
 if listTrash {
 	listTrashBin()
 }
@@ -35,18 +43,3 @@ if listTrash {
 if emptyOut {
 	emptyTrash()
 }
-
-if !fileUrls.isEmpty {
-	trash(fileUrls)
-}
-else if (!listTrash && !emptyOut) {
-	if fileUrls.isEmpty {
-		printWarning("No files found matching criteria or no files speccified.")
-	}
-	else {
-		print("Usage: \(programName) [-f | -i] [-dRrsvW] file ... [-el]")
-		print("       send files to macOS trash (or unlink)")
-	}
-}
-
-

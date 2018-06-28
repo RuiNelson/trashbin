@@ -10,11 +10,11 @@ extension Character {
 }
 
 func printError(_ message: String) {
-	fputs("🛑 " + programName + ": " + message + "\n", stderr)
+	fputs(programName + " 🛑 : " + message + "\n\r", stderr)
 }
 
 func printWarning(_ mesage : String) {
-	print("⚠️ " + mesage)
+	print(programName + " ⚠️ " + mesage)
 }
 
 enum QuestionType : Int {
@@ -24,7 +24,7 @@ enum QuestionType : Int {
 var alwaysYesForQuestionType : Set<QuestionType> = []
 
 func promptYesOrNo(question: String, questionType: QuestionType) -> Bool {
-	fputs("⚠️ \(question) " + (" [Y/N/A] "), stdout)
+	fputs(programName + "❓ \(question) " + (" [Y/N/A] "), stdout)
 	
 	if alwaysYesForQuestionType.contains(questionType) {
 		print("Y")
@@ -43,7 +43,7 @@ func promptYesOrNo(question: String, questionType: QuestionType) -> Bool {
 			case "a": alwaysYesForQuestionType.insert(questionType)
 				return true
 			default:
-				print("Invalid answer, reply with Y (yes), N (no) or A (always yes)\n\(question)")
+				printError("Invalid answer, reply with Y (yes), N (no) or A (always yes): \(question)")
 				reply = nil
 			}
 		}

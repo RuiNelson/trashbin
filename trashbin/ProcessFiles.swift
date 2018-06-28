@@ -13,6 +13,7 @@ enum CheckPreTrashResult: Equatable {
 	case readOnly
 }
 
+var userDidInputFiles = false
 func processInputFiles() -> [URL] {
 	let currentPath = fileManager.currentDirectoryPath
 	let currentPathURL = URL(fileURLWithPath: currentPath, isDirectory: true)
@@ -21,8 +22,16 @@ func processInputFiles() -> [URL] {
 		return argument.first != "-"
 	}
 
+	if !files.isEmpty {
+		userDidInputFiles = true
+	}
+
 	let globs: [[String]] = files.map { (file) -> [String] in
-		return glob(pattern: file)
+		let globResult = glob(pattern: file)
+		if globResult.isEmpty {
+			printWarning("cannot \(actionPresent) '\(file)': No such file or directory")
+		}
+		return globResult
 	}
 
 	let flatGlobs: [String] = globs.flatMap { $0 }
