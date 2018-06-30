@@ -29,7 +29,7 @@ extension FileManager {
 		return nil
 	}
 
-	enum PosixPermission: Int {
+	enum PosixPermission: Int, CaseIterable {
 		case ownerReadable      = 0b100000000
 		case ownerWritable      = 0b010000000
 		case ownerExecutable    = 0b001000000
@@ -41,13 +41,17 @@ extension FileManager {
 		case allExecutable      = 0b000000001
 	}
 
-	func permissionOfItem(atPath: String, permission: PosixPermission) -> Bool? {
-		if let attributes = try? attributesOfItem(atPath: atPath) {
-			if let posixPermissions = attributes[FileAttributeKey.posixPermissions] as? Int {
-				return (posixPermissions & permission.rawValue) != 0
+	func itemPermissions(atPath: String) throws -> [PosixPermission] {
+		var r : [PosixPermission] = []
+		let attributes = try attributesOfItem(atPath: atPath)
+		if let posix = attributes[FileAttributeKey.posixPermissions] as? Int {
+			for permission in PosixPermission.allCases {
+				if posix & permission.rawValue != 0 {
+					r.append(permission)
+				}
 			}
 		}
-		return nil
+		return r
 	}
 
 	func sizeOfFile(atPath: String) -> Int64 {

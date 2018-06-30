@@ -9,22 +9,28 @@ extension Character {
 	}
 }
 
+extension String {
+	mutating func addSpace() {
+		self+=" "
+	}
+}
+
 func printError(_ message: String) {
-	fputs(programName + " 🛑 : " + message + "\n\r", stderr)
+	fputs(Constants.programName + " 🛑 " + message + "\n\r", stderr)
 }
 
 func printWarning(_ mesage : String) {
-	print(programName + " ⚠️ " + mesage)
+	print(Constants.programName + " ⚠️  " + mesage)
 }
 
 enum QuestionType : Int {
 	case differentOwner, readOnly, promptDeletion
 }
 
-var alwaysYesForQuestionType : Set<QuestionType> = []
+fileprivate var alwaysYesForQuestionType : Set<QuestionType> = []
 
 func promptYesOrNo(question: String, questionType: QuestionType) -> Bool {
-	fputs(programName + "❓ \(question) " + (" [Y/N/A] "), stdout)
+	fputs(Constants.programName + "❓ \(question) " + (" [Y/N/A] "), stdout)
 	
 	if alwaysYesForQuestionType.contains(questionType) {
 		print("Y")
@@ -52,45 +58,21 @@ func promptYesOrNo(question: String, questionType: QuestionType) -> Bool {
 	fatalError()
 }
 
-func glob(pattern: String) -> [String] {
-	let globFlags: Int32 = GLOB_MARK | GLOB_NOESCAPE | GLOB_BRACE | GLOB_NOMAGIC | GLOB_TILDE
-	return glob(pattern: pattern, globFlags: globFlags)
-}
-
-func glob(pattern: String, globFlags: Int32) -> [String] {
-	func doGlob(pattern: UnsafePointer<Int8>, flags: Int32, globType: UnsafeMutablePointer<glob_t>) -> Int32 {
-		return glob(pattern, flags, nil, globType)
-	}
-
-	var globType = glob_t()
-	let pattern = strdup(pattern)!
-
-	var result: [String] = []
-
-	if doGlob(pattern: pattern, flags: globFlags, globType: &globType) == 0 {
-		let numberOfMatches = Int(globType.gl_matchc)
-
-		for matchNum in 0..<numberOfMatches {
-			let match = String(cString: globType.gl_pathv[matchNum]!)
-			result.append(match)
-		}
-	}
-
-	return result
-}
-
 func fileInfoPrint(path: String, size: Int64?, emoji: String? = nil) {
 	var line = ""
 	
 	if let emoji = emoji {
-		line += emoji + " "
+		line += emoji
+		line.addSpace()
 	}
-	
+
 	line += path
-	
+
+
 	if let fileSize = size {
-		line += " "
-		line += "(" + bcf.string(fromByteCount: fileSize) + ")"
+		line.addSpace()
+		let sizeString = "(" + Constants.byteCountFormatter.string(fromByteCount: fileSize) + ")"
+		line += sizeString
 	}
 	
 	print(line)

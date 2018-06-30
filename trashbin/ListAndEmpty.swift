@@ -14,43 +14,41 @@ func trashBinContents() -> [String] {
 	return flat
 }
 
-func listTrashBin() {
+func listTrashBin() -> Int64? {
 	var total: Int64 = 0
 	let contents = trashBinContents()
 	
 	if contents.isEmpty {
 		print("Trash is empty")
-		return
+		return nil
 	}
 	
 	print("Trash contents:")
 	for content in contents {
 		var size: Int64?
 
-		if showSize {
-			size = fileManager.sizeOfItem(atPath: content)
+		if options.showSize {
+			size = Constants.fileManager.sizeOfItem(atPath: content)
 			total += size ?? 0
 		}
 
 		fileInfoPrint(path: content, size: size)
 	}
 
-	if showSize {
-		print("Total in trash: \(bcf.string(fromByteCount: total))")
-	}
+	return options.showSize ? total : nil
 }
 
-func emptyTrash() {
-	unlink = true
-	directories = true
-	recursive = true
+func emptyTrash() -> Int64? {
+	options.unlink = true
+	options.directories = true
+	options.recursive = true
 
 	var total: Int64 = 0
 	let contents = trashBinContents()
 
 	if contents.isEmpty {
-		printError("Trash is already empty")
-		return
+		printWarning("Trash is already empty")
+		return nil
 	}
 	
 	print ("Emptying the trash...")
@@ -60,7 +58,5 @@ func emptyTrash() {
 		total += trash(url)
 	}
 
-	if showSize {
-		print("Total unlinked: \(bcf.string(fromByteCount: total))")
-	}
+	return options.showSize ? total : nil
 }

@@ -2,23 +2,69 @@
 
 import Foundation
 
-func trash(_ urls: [URL]) {
+fileprivate enum CheckPreTrashResult: Equatable {
+	case noAttentionNeeded
+	case ownedBySomeoneElse(by: String)
+	case readOnly
+}
+
+fileprivate enum FileCheckResult {
+	case doesntExist, isFile, isDirectory
+}
+
+fileprivate func checkPreTrash(_ url: URL) -> CheckPreTrashResult {
+	let path = url.path
+
+	// check ownership
+	if let owner = Constants.fileManager.ownerOfItem(atPath: path) {
+		if owner != Constants.userName {
+			return .ownedBySomeoneElse(by: owner)
+		}
+	}
+
+	// check write permission
+	if let ownerWritable = try? Constants.fileManager
+		.itemPermissions(atPath: path)
+		.contains(FileManager.PosixPermission.ownerWritable) {
+
+		if !ownerWritable {
+			return .readOnly
+		}
+	}
+
+	// no problems found
+	return .noAttentionNeeded
+}
+
+func trash(_ urls: [URL]) -> Int64? {
+	func checkItem(_ url: URL) -> FileCheckResult {
+		if Constants.fileManager.fileExists(atPath: url.path) {
+			if Constants.fileManager.isDirectory(atPath: url.path) {
+				return .isDirectory
+			} else {
+				return .isFile
+			}
+		} else {
+			return .doesntExist
+		}
+	}
+
 	var total: Int64 = 0
 
 	for url in urls {
-		switch checkFile(url) {
+		switch checkItem(url) {
 		case .doesntExist:
-			if !force {
+			if !options.force {
 				printError("\(url.path): No such file or directory")
 			}
 		case .isFile:
 			total += trash(url)
 		case .isDirectory:
-			if directories {
-				if recursive {
+			if options.directories {
+				if options.recursive {
 					total += trash(url)
 				} else {
-					if let isEmpty = fileManager.isDirectoryEmpty(atPath: url.path) {
+					if let isEmpty = Constants.fileManager.isDirectoryEmpty(atPath: url.path) {
 						if isEmpty {
 							total += trash(url)
 						} else {
@@ -32,68 +78,66 @@ func trash(_ urls: [URL]) {
 		}
 	}
 
-	if showSize {
-		print("\(actionPast.capitalized): \(bcf.string(fromByteCount: total))")
-	}
+	return options.showSize ? total : nil
 }
 
 func trash(_ url: URL) -> Int64 {
 	let path = url.path
-	var userConfirm = false
+	var needsUserConfirmation = false
 	let check: CheckPreTrashResult = checkPreTrash(url)
 
-	if !force {
+	if !options.force {
 		//-f not used, ask if the user really wants to delete file if not a regular file
 		switch check {
 		case .noAttentionNeeded:
-			userConfirm = true
+			needsUserConfirmation = true
 		case .ownedBySomeoneElse(by: let owner):
-			if NSUserName() != "root" {
-				userConfirm = promptYesOrNo(question: "\(path) is owned by \(owner), \(actionPresent) anyway?",
+			if !Constants.userIsRoot {
+				needsUserConfirmation = promptYesOrNo(question: "\(path) is owned by \(owner), \(options.actionPresent) anyway?",
 					questionType: .differentOwner)
 			} else {
-				userConfirm = true
+				needsUserConfirmation = true
 			}
 		case .readOnly:
-			userConfirm = promptYesOrNo(question: "File \(path) is read-only, \(actionPresent) anyway?",
+			needsUserConfirmation = promptYesOrNo(question: "File \(path) is read-only, \(options.actionPresent) anyway?",
 				questionType: .readOnly)
 		}
 	} else {
 		//user has forced, no need for confirmation
-		userConfirm = true
+		needsUserConfirmation = true
 	}
 
-	if interactive && check == .noAttentionNeeded {
+	if options.interactive && check == .noAttentionNeeded {
 		switch check {
 		case .noAttentionNeeded:
-			if userConfirm {
-				userConfirm = promptYesOrNo(question: "\(actionPresent.capitalized) \(path)?",
+			if needsUserConfirmation {
+				needsUserConfirmation = promptYesOrNo(question: "\(options.actionPresent.capitalized) \(path)?",
 					questionType: .promptDeletion)
 			}
 		default:
-			userConfirm = true // already asked, no need to ask again
+			needsUserConfirmation = true // already asked, no need to ask again
 		}
 	}
 
-	if userConfirm {
+	if needsUserConfirmation {
 		do {
 			var size: Int64?
 
-			if showSize {
-				size = fileManager.sizeOfItem(atPath: path)
+			if options.showSize {
+				size = Constants.fileManager.sizeOfItem(atPath: path)
 			}
 
-			if verbose {
+			if options.verbose {
 				fileInfoPrint(path: path,
 							  size: size,
-							  emoji: (unlink ? "🔗" : "🗑 "))
+							  emoji: (options.unlink ? "🔗" : "🗑 "))
 			}
 
-			if unlink {
-				try fileManager.removeItem(at: url)
+			if options.unlink {
+				try Constants.fileManager.removeItem(at: url)
 				return size ?? 0
 			} else {
-				try fileManager.trashItem(at: url, resultingItemURL: nil)
+				try Constants.fileManager.trashItem(at: url, resultingItemURL: nil)
 				return size ?? 0
 			}
 
@@ -102,7 +146,7 @@ func trash(_ url: URL) -> Int64 {
 			return 0
 		}
 	} else {
-		print("\(path) not \(actionPast)")
+		print("\(path) not \(options.actionPast)")
 		return 0
 	}
 

@@ -3,43 +3,73 @@
 import Foundation
 import Darwin
 
-enum ExitCodes : Int {
-	case unknownOption = -1
-	case unsupportedOption = -2
-	case mutualExclusiveOptions = -3
+enum ExitCodes : Int32 {
+	case normal = 0
+	case badSyntax = 64
+	case mutualExclusiveOptions = 30
+	case noSuchFileOrDirectory = 1
 	
 	func exit() {
-		Darwin.exit(Int32(self.rawValue))
+		if self == .badSyntax {
+			print("Usage: \(Constants.programName) [-f | -i] [-dRrsv] [-el] file ...")
+			print("       send files to macOS trash (or unlink)")
+		}
+
+		Darwin.exit(self.rawValue)
 	}
 }
 
-let programPath = CommandLine.arguments.first!
-let pathUrl = URL(fileURLWithPath: programPath)
-let programName = pathUrl.lastPathComponent
+struct Constants {
+	static var programName : String {
+		let programPath = CommandLine.arguments.first!
+		let pathUrl = URL(fileURLWithPath: programPath)
+		return pathUrl.lastPathComponent
+	}
 
-// print(CommandLine.arguments.first!)
+	static let fileManager = FileManager.default
 
-let fileManager = FileManager.default
-let bcf = ByteCountFormatter()
-bcf.allowedUnits = [ByteCountFormatter.Units.useAll]
-bcf.countStyle = ByteCountFormatter.CountStyle.file
+	static var byteCountFormatter : ByteCountFormatter {
+		let x = ByteCountFormatter()
+		x.allowedUnits = [ByteCountFormatter.Units.useAll]
+		x.countStyle = ByteCountFormatter.CountStyle.file
+		return x
+	}
 
-processOptions()
+	static var userName = NSUserName()
+	static var userIsRoot = NSUserName() == "root"
+}
 
-let fileUrls = processInputFiles()
+
+let fileUrls = collectFiles()
 
 if !fileUrls.isEmpty {
-	trash(fileUrls)
+	let trashed = trash(fileUrls)
+	if let trashed = trashed {
+		print("Total \(options.actionPast): \(Constants.byteCountFormatter.string(fromByteCount: trashed))")
+	}
 }
-else if (!listTrash && !emptyOut && !userDidInputFiles) {
-	print("Usage: \(programName) [-f | -i] [-dRrsvW] file ... [-el]")
-	print("       send files to macOS trash (or unlink)")
+else if (!options.listTrash && !options.emptyOut) {
+	if userEnteredFiles {
+		ExitCodes.noSuchFileOrDirectory.exit()
+	}
+	else {
+		ExitCodes.badSyntax.exit()
+	}
 }
 
-if listTrash {
-	listTrashBin()
+
+if options.listTrash {
+	let trashSize = listTrashBin()
+	if let trashSize = trashSize {
+		print("Trash size: \(Constants.byteCountFormatter.string(fromByteCount: trashSize))")
+	}
 }
 
-if emptyOut {
-	emptyTrash()
+if options.emptyOut {
+	let emptied = emptyTrash()
+	if let emptied = emptied {
+		print("Total emptied: \(Constants.byteCountFormatter.string(fromByteCount: emptied))")
+	}
 }
+
+ExitCodes.normal.exit()
