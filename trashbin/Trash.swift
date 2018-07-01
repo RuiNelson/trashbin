@@ -2,7 +2,7 @@
 
 import Foundation
 
-private enum CheckPreTrashResult: Equatable {
+private enum CheckPreExecuteResult: Equatable {
 	case noAttentionNeeded
 	case ownedBySomeoneElse(by: String)
 	case readOnly
@@ -12,7 +12,7 @@ private enum FileCheckResult {
 	case doesntExist, isFile, isDirectory
 }
 
-private func checkPreExecution(_ url: URL) -> CheckPreTrashResult {
+private func checkPreExecution(_ url: URL) -> CheckPreExecuteResult {
 	let path = url.path
 
 	// check ownership
@@ -93,7 +93,7 @@ private func overwriteFile(_ url: URL, pattern: UInt8) throws {
 	fh.seek(toFileOffset: 0)
 	assert(fh.offsetInFile == 0)
 
-	let blockSize: Int64 = 4096
+	let blockSize: Int64 = 1000000
 	let blocks = size / blockSize
 	let remaining = size - (blocks*blockSize)
 
