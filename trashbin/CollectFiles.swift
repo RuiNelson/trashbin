@@ -30,5 +30,3 @@ func collectFiles() -> [URL] {
 
 	return filesUrlsArray
 }
-
-

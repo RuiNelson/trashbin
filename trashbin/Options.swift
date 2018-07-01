@@ -24,10 +24,6 @@ class Options {
 	}
 
 	init() {
-		processOptions()
-	}
-
-	private func processOptions() {
 		while case let option = getopt(CommandLine.argc, CommandLine.unsafeArgv, "defilPRrsuvW:"), option != -1 {
 			let opt = UnicodeScalar(CUnsignedChar(option))
 			switch opt {
@@ -62,10 +58,8 @@ class Options {
 			}
 		}
 
-		checkUnsupportedOptions()
-	}
+		// checkup
 
-	private func checkUnsupportedOptions() {
 		if undelete {
 			printError("Sorry, but this utility can't undelete files. You can use your macOS's trash bin to do that.")
 			ExitCodes.badSyntax.exit()
@@ -78,16 +72,12 @@ class Options {
 			printError("For the overwrite option to be valid, you can't add directories.")
 			ExitCodes.overwriteWithDirectories.exit()
 		}
-		if (interactive && force) {
+		if interactive && force {
 			printError("Options 'interactive' and 'force' are mutually exclusive.")
 			ExitCodes.mutualExclusiveOptions.exit()
 		}
 	}
+
 }
 
 let options = Options()
-
-
-
-
-

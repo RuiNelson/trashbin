@@ -4,7 +4,7 @@ import Foundation
 import Darwin
 
 extension Character {
-	var lowerCased : Character {
+	var lowerCased: Character {
 		return self.description.lowercased().first!
 	}
 }
@@ -19,25 +19,24 @@ func printError(_ message: String) {
 	fputs(Constants.programName + " 🛑 " + message + "\n\r", stderr)
 }
 
-func printWarning(_ mesage : String) {
+func printWarning(_ mesage: String) {
 	print(Constants.programName + " ⚠️  " + mesage)
 }
 
-enum QuestionType : Int {
+enum QuestionType: Int {
 	case differentOwner, readOnly, promptDeletion
 }
 
-fileprivate var alwaysYesForQuestionType : Set<QuestionType> = []
+private var alwaysYesForQuestionType: Set<QuestionType> = []
 
 func promptYesOrNo(question: String, questionType: QuestionType) -> Bool {
 	fputs(Constants.programName + "❓ \(question) " + (" [Y/N/A] "), stdout)
-	
+
 	if alwaysYesForQuestionType.contains(questionType) {
 		print("Y")
 		return true
 	}
-	
-	
+
 	var reply: String? = nil
 
 	while reply == nil {
@@ -60,7 +59,7 @@ func promptYesOrNo(question: String, questionType: QuestionType) -> Bool {
 
 func fileInfoPrint(path: String, size: Int64?, emoji: String? = nil) {
 	var line = ""
-	
+
 	if let emoji = emoji {
 		line += emoji
 		line.addSpace()
@@ -68,12 +67,11 @@ func fileInfoPrint(path: String, size: Int64?, emoji: String? = nil) {
 
 	line += path
 
-
 	if let fileSize = size {
 		line.addSpace()
 		let sizeString = "(" + Constants.byteCountFormatter.string(fromByteCount: fileSize) + ")"
 		line += sizeString
 	}
-	
+
 	print(line)
 }

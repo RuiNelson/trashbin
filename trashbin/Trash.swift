@@ -2,17 +2,17 @@
 
 import Foundation
 
-fileprivate enum CheckPreTrashResult: Equatable {
+private enum CheckPreTrashResult: Equatable {
 	case noAttentionNeeded
 	case ownedBySomeoneElse(by: String)
 	case readOnly
 }
 
-fileprivate enum FileCheckResult {
+private enum FileCheckResult {
 	case doesntExist, isFile, isDirectory
 }
 
-fileprivate func checkPreTrash(_ url: URL) -> CheckPreTrashResult {
+private func checkPreTrash(_ url: URL) -> CheckPreTrashResult {
 	let path = url.path
 
 	// check ownership
@@ -36,7 +36,7 @@ fileprivate func checkPreTrash(_ url: URL) -> CheckPreTrashResult {
 	return .noAttentionNeeded
 }
 
-func trash(_ urls: [URL]) -> Int64? {
+func execute(_ urls: [URL]) -> Int64? {
 	func checkItem(_ url: URL) -> FileCheckResult {
 		if Constants.fileManager.fileExists(atPath: url.path) {
 			if Constants.fileManager.isDirectory(atPath: url.path) {
@@ -58,15 +58,15 @@ func trash(_ urls: [URL]) -> Int64? {
 				printError("\(url.path): No such file or directory")
 			}
 		case .isFile:
-			total += trash(url)
+			total += execute(url)
 		case .isDirectory:
 			if options.directories {
 				if options.recursive {
-					total += trash(url)
+					total += execute(url)
 				} else {
 					if let isEmpty = Constants.fileManager.isDirectoryEmpty(atPath: url.path) {
 						if isEmpty {
-							total += trash(url)
+							total += execute(url)
 						} else {
 							printError("\(url.path): Directory not empty")
 						}
@@ -81,19 +81,19 @@ func trash(_ urls: [URL]) -> Int64? {
 	return options.showSize ? total : nil
 }
 
-fileprivate func overwriteFile(_ url : URL) throws {
+private func overwriteFile(_ url: URL) throws {
 	try overwriteFile(url, pattern: 0xFF)
 	try overwriteFile(url, pattern: 0x00)
 	try overwriteFile(url, pattern: 0xFF)
 }
 
-fileprivate func overwriteFile(_ url : URL, pattern: UInt8) throws {
+private func overwriteFile(_ url: URL, pattern: UInt8) throws {
 	let size = Constants.fileManager.sizeOfFile(atPath: url.path)
 	let fh = try FileHandle(forWritingTo: url)
 	fh.seek(toFileOffset: 0)
 	assert(fh.offsetInFile == 0)
-	
-	let blockSize : Int64 = 4096 // APFS block size = 4KB
+
+	let blockSize: Int64 = 4096 // APFS block size = 4KB
 	let blocks = size / blockSize
 	let remaining = size - (blocks*blockSize)
 
@@ -103,19 +103,19 @@ fileprivate func overwriteFile(_ url : URL, pattern: UInt8) throws {
 	}
 
 	let byte = Data(bytes: [pattern])
-	
+
 	for _ in 0..<blocks {
 		fh.write(block)
 	}
 	for _ in 0..<remaining {
 		fh.write(byte)
 	}
-	
+
 	fh.synchronizeFile()
 	fh.closeFile()
 }
 
-func trash(_ url: URL) -> Int64 {
+func execute(_ url: URL) -> Int64 {
 	let path = url.path
 	var needsUserConfirmation = false
 	let check: CheckPreTrashResult = checkPreTrash(url)
@@ -168,7 +168,7 @@ func trash(_ url: URL) -> Int64 {
 							  size: size,
 							  emoji: (options.unlink ? "🔗" : "🗑 "))
 			}
-			
+
 			if options.overwrite {
 				try overwriteFile(url)
 			}

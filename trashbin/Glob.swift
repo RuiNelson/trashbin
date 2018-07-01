@@ -29,4 +29,3 @@ func glob(pattern: String, globFlags: Int32) -> [String] {
 
 	return result
 }
-

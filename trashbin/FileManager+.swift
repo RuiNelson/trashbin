@@ -42,16 +42,16 @@ extension FileManager {
 	}
 
 	func itemPermissions(atPath: String) throws -> [PosixPermission] {
-		var r : [PosixPermission] = []
+		var permissions: [PosixPermission] = []
 		let attributes = try attributesOfItem(atPath: atPath)
+
 		if let posix = attributes[FileAttributeKey.posixPermissions] as? Int {
-			for permission in PosixPermission.allCases {
-				if posix & permission.rawValue != 0 {
-					r.append(permission)
-				}
+			for permission in PosixPermission.allCases where (posix & permission.rawValue) != 0 {
+				permissions.append(permission)
 			}
 		}
-		return r
+
+		return permissions
 	}
 
 	func sizeOfFile(atPath: String) -> Int64 {

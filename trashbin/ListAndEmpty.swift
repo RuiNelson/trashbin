@@ -6,23 +6,23 @@ func trashBinContents() -> [String] {
 	let trashHome = glob(pattern: "~/.Trash/*")
 	let trashVolumes = glob(pattern: "/Volumes/*/.Trashes/*/*")
 	let trashiCloud = glob(pattern: "~/Library/Mobile Documents/com~apple~CloudDocs/.Trash/*")
-	
+
 	let allTrashes = [trashHome, trashVolumes, trashiCloud]
-	
+
 	let flat = allTrashes.flatMap { return $0 }
-	
+
 	return flat
 }
 
 func listTrashBin() -> Int64? {
 	var total: Int64 = 0
 	let contents = trashBinContents()
-	
+
 	if contents.isEmpty {
 		print("Trash is empty")
 		return nil
 	}
-	
+
 	print("Trash contents:")
 	for content in contents {
 		var size: Int64?
@@ -50,12 +50,12 @@ func emptyTrash() -> Int64? {
 		printWarning("Trash is already empty")
 		return nil
 	}
-	
+
 	print ("Emptying the trash...")
 	for content in contents {
 		let url = URL(fileURLWithPath: content)
 
-		total += trash(url)
+		total += execute(url)
 	}
 
 	return options.showSize ? total : nil
