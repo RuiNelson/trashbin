@@ -12,7 +12,7 @@ private enum FileCheckResult {
 	case doesntExist, isFile, isDirectory
 }
 
-private func checkPreTrash(_ url: URL) -> CheckPreTrashResult {
+private func checkPreExecution(_ url: URL) -> CheckPreTrashResult {
 	let path = url.path
 
 	// check ownership
@@ -93,7 +93,7 @@ private func overwriteFile(_ url: URL, pattern: UInt8) throws {
 	fh.seek(toFileOffset: 0)
 	assert(fh.offsetInFile == 0)
 
-	let blockSize: Int64 = 4096 // APFS block size = 4KB
+	let blockSize: Int64 = 4096
 	let blocks = size / blockSize
 	let remaining = size - (blocks*blockSize)
 
@@ -115,56 +115,43 @@ private func overwriteFile(_ url: URL, pattern: UInt8) throws {
 	fh.closeFile()
 }
 
-func execute(_ url: URL) -> Int64 {
-	let path = url.path
-	var needsUserConfirmation = false
-	let check: CheckPreTrashResult = checkPreTrash(url)
-
-	if !options.force {
-		//-f not used, ask if the user really wants to delete file if not a regular file
-		switch check {
-		case .noAttentionNeeded:
-			needsUserConfirmation = true
-		case .ownedBySomeoneElse(by: let owner):
-			if !Constants.userIsRoot {
-				needsUserConfirmation = promptYesOrNo(
-					question: "\(path) is owned by \(owner), \(options.actionPresent) anyway?",
-					questionType: .differentOwner)
-			} else {
-				needsUserConfirmation = true
-			}
-		case .readOnly:
-			needsUserConfirmation = promptYesOrNo(
-				question: "File \(path) is read-only, \(options.actionPresent) anyway?",
-				questionType: .readOnly)
-		}
+private func canExecute(_ url: URL) -> Bool {
+	if options.force {
+		return true
 	} else {
-		//user has forced, no need for confirmation
-		needsUserConfirmation = true
-	}
+		let check = checkPreExecution(url)
 
-	if options.interactive && check == .noAttentionNeeded {
 		switch check {
 		case .noAttentionNeeded:
-			if needsUserConfirmation {
-				needsUserConfirmation = promptYesOrNo(question: "\(options.actionPresent.capitalized) \(path)?",
-					questionType: .promptDeletion)
+			if options.interactive {
+				return promptYesOrNo(question: "\(options.actionPresent.capitalized) \(url.path)?",
+									 questionType: .promptDeletion)
+			} else {
+				return true
 			}
-		default:
-			needsUserConfirmation = true // already asked, no need to ask again
+		case .ownedBySomeoneElse(by: let owner):
+			return promptYesOrNo(question: "\(url.path) is owned by \(owner), \(options.actionPresent) anyway?",
+								 questionType: .differentOwner)
+		case .readOnly:
+			return promptYesOrNo(question: "\(url.path) is read-only, \(options.actionPresent) anyway?",
+								 questionType: .readOnly)
 		}
 	}
+}
 
-	if needsUserConfirmation {
+func execute(_ url: URL) -> Int64 {
+	let confirmed = canExecute(url)
+
+	if confirmed {
 		do {
-			var size: Int64?
+			var size: Int64 = 0
 
 			if options.showSize {
-				size = Constants.fileManager.sizeOfItem(atPath: path)
+				size = Constants.fileManager.sizeOfItem(atPath: url.path)
 			}
 
 			if options.verbose {
-				fileInfoPrint(path: path,
+				fileInfoPrint(path: url.path,
 							  size: size,
 							  emoji: (options.unlink ? "🔗" : "🗑 "))
 			}
@@ -175,10 +162,10 @@ func execute(_ url: URL) -> Int64 {
 
 			if options.unlink {
 				try Constants.fileManager.removeItem(at: url)
-				return size ?? 0
+				return size
 			} else {
 				try Constants.fileManager.trashItem(at: url, resultingItemURL: nil)
-				return size ?? 0
+				return size
 			}
 
 		} catch {
@@ -186,7 +173,7 @@ func execute(_ url: URL) -> Int64 {
 			return 0
 		}
 	} else {
-		print("\(path) not \(options.actionPast)")
+		print("\(url.path) not \(options.actionPast)")
 		return 0
 	}
 

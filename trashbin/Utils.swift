@@ -23,7 +23,7 @@ func printWarning(_ mesage: String) {
 	print(Constants.programName + " ⚠️  " + mesage)
 }
 
-enum QuestionType: Int {
+enum QuestionType {
 	case differentOwner, readOnly, promptDeletion
 }
 
@@ -43,8 +43,8 @@ func promptYesOrNo(question: String, questionType: QuestionType) -> Bool {
 		reply = readLine()
 		if let rFirst = reply?.first {
 			switch rFirst.lowerCased {
-			case "y": return true
-			case "n": return false
+			case "y": fputs("\r", stdout); return true
+			case "n": fputs("\r", stdout); return false
 			case "a": alwaysYesForQuestionType.insert(questionType)
 				return true
 			default:
