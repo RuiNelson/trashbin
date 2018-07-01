@@ -13,7 +13,7 @@ enum ExitCodes: Int32 {
 
 	func exit() {
 		if self == .badSyntax {
-			print("Usage: \(Constants.programName) [-f | -i] [-dRrsv] [-el] file ...")
+			print("Usage: \(Constants.programName) [-f | -i] [-dPRrsuv] [-el] file ...")
 			print("       send files to macOS trash (or unlink)")
 		}
 
