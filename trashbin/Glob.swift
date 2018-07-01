@@ -1,10 +1,4 @@
-//
-//  Glob.swift
-//  trashbin
-//
-//  Created by Rui Nelson Carneiro on 30/06/18.
 //  Copyright © 2018 Rui Nelson Magalhães Carneiro. All rights reserved.
-//
 
 import Foundation
 import Darwin

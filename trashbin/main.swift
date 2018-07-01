@@ -7,6 +7,8 @@ enum ExitCodes : Int32 {
 	case normal = 0
 	case badSyntax = 64
 	case mutualExclusiveOptions = 30
+	case overwriteWithoutUnlink = 31
+	case overwriteWithDirectories = 32
 	case noSuchFileOrDirectory = 1
 	
 	func exit() {

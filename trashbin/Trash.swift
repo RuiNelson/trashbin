@@ -81,6 +81,40 @@ func trash(_ urls: [URL]) -> Int64? {
 	return options.showSize ? total : nil
 }
 
+fileprivate func overwriteFile(_ url : URL) throws {
+	try overwriteFile(url, pattern: 0xFF)
+	try overwriteFile(url, pattern: 0x00)
+	try overwriteFile(url, pattern: 0xFF)
+}
+
+fileprivate func overwriteFile(_ url : URL, pattern: UInt8) throws {
+	let size = Constants.fileManager.sizeOfFile(atPath: url.path)
+	let fh = try FileHandle(forWritingTo: url)
+	fh.seek(toFileOffset: 0)
+	assert(fh.offsetInFile == 0)
+	
+	let blockSize : Int64 = 4096 // APFS block size = 4KB
+	let blocks = size / blockSize
+	let remaining = size - (blocks*blockSize)
+
+	var block = Data(capacity: Int(blockSize))
+	for _ in 0..<blockSize {
+		block.append(pattern)
+	}
+
+	let byte = Data(bytes: [pattern])
+	
+	for _ in 0..<blocks {
+		fh.write(block)
+	}
+	for _ in 0..<remaining {
+		fh.write(byte)
+	}
+	
+	fh.synchronizeFile()
+	fh.closeFile()
+}
+
 func trash(_ url: URL) -> Int64 {
 	let path = url.path
 	var needsUserConfirmation = false
@@ -93,13 +127,15 @@ func trash(_ url: URL) -> Int64 {
 			needsUserConfirmation = true
 		case .ownedBySomeoneElse(by: let owner):
 			if !Constants.userIsRoot {
-				needsUserConfirmation = promptYesOrNo(question: "\(path) is owned by \(owner), \(options.actionPresent) anyway?",
+				needsUserConfirmation = promptYesOrNo(
+					question: "\(path) is owned by \(owner), \(options.actionPresent) anyway?",
 					questionType: .differentOwner)
 			} else {
 				needsUserConfirmation = true
 			}
 		case .readOnly:
-			needsUserConfirmation = promptYesOrNo(question: "File \(path) is read-only, \(options.actionPresent) anyway?",
+			needsUserConfirmation = promptYesOrNo(
+				question: "File \(path) is read-only, \(options.actionPresent) anyway?",
 				questionType: .readOnly)
 		}
 	} else {
@@ -131,6 +167,10 @@ func trash(_ url: URL) -> Int64 {
 				fileInfoPrint(path: path,
 							  size: size,
 							  emoji: (options.unlink ? "🔗" : "🗑 "))
+			}
+			
+			if options.overwrite {
+				try overwriteFile(url)
 			}
 
 			if options.unlink {

@@ -70,9 +70,13 @@ class Options {
 			printError("Sorry, but this utility can't undelete files. You can use your macOS's trash bin to do that.")
 			ExitCodes.badSyntax.exit()
 		}
-		if overwrite {
-			printError("Sorry, but this utility has no support of overwriting files, they are sent to the trash")
-			ExitCodes.badSyntax.exit()
+		if overwrite && !unlink {
+			printError("For the overwrite option to be valid, the unlink option must also be used.")
+			ExitCodes.overwriteWithoutUnlink.exit()
+		}
+		if overwrite && directories {
+			printError("For the overwrite option to be valid, you can't add directories.")
+			ExitCodes.overwriteWithDirectories.exit()
 		}
 		if (interactive && force) {
 			printError("Options 'interactive' and 'force' are mutually exclusive.")
