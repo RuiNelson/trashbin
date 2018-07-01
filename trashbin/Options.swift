@@ -59,7 +59,6 @@ class Options {
 		}
 
 		// checkup
-
 		if undelete {
 			printError("Sorry, but this utility can't undelete files. You can use your macOS's trash bin to do that.")
 			ExitCodes.badSyntax.exit()

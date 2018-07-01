@@ -21,27 +21,28 @@ permissions of the file do not permit writing, the user is prompted (on the stan
 
 The options are as follows:
 
-**-d** Attempt to trash directories as well files, if they are empty.
+**-d**  Attempt to trash directories as well files, if they are empty.
 
-**-e** Empty out the trash (unlinks files in the trash).
+**-e**  Empty out the trash (unlinks files in the trash).
 
-**-f** Attempt to trash the files without prompting for confirmation, regardless of the file's
-permissions.
+**-f**  Attempt to trash/unlink the files without prompting for confirmation, regardless of the file's permissions.  If the file does not exist, do not display a diagnostic message or modify the exit status to reflect an error. The **-f** option overrides any previous **-i** options.
 
-**-i** Asks for user permission for each file to be trashed.
+**-i**  Request confirmation before attempting to trash/unlink each file, regardless of the file's permissions, or whether or not the standard input device is a terminal. The -i option overrides any previous -f options.
 
-**-l** List all files in the trash.
+**-P**  Overwrite files before deleting them.  Files are overwritten three times, first with the byte pattern 0xff, then 0x00, and then 0xff again, before they are deleted. Must be used in combination with **-u** and not with **-d** or **-r**
 
-**-r** Attempt to trash directories as well files even if they aren't empty.
+**-l**  List all files in the trash.
 
-**-R** Same as **-r**
+**-r**  Attempt to trash directories as well files even if they aren't empty.
 
-**-s** Shows total size of files and directories being trashed or listed or unlinked. If used
+**-R**  Same as **-r**
+
+**-s**  Shows total size of files and directories being trashed or listed or unlinked. If used
 with **-v** option, also prints every file or directory size.
 
-**-u** Instead of trashing files, unlinks them (`rm` behavior)
+**-u**  Instead of trashing files, unlinks them (`rm` behavior)
 
-**-v** Prints out every file or directory being trashed or listed or unlinked. See also the **-s** option
+**-v**  Be verbose when trashing/unlinking files, showing them as they are removed. See also the **-s** option
 
 
 ## Compatibility

@@ -16,7 +16,7 @@ func collectFiles() -> [URL] {
 
 	let globs: [[String]] = files.map { (file) -> [String] in
 		let globResult = glob(pattern: file)
-		if globResult.isEmpty {
+		if globResult.isEmpty && !options.force {
 			printWarning("cannot \(options.actionPresent) '\(file)': No such file or directory")
 		}
 		return globResult
