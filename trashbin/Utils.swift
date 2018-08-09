@@ -1,7 +1,7 @@
 //  Copyright © 2018 Rui Nelson Magalhães Carneiro. All rights reserved.
 
-import Foundation
 import Darwin
+import Foundation
 
 extension Character {
 	var lowerCased: Character {
@@ -37,7 +37,7 @@ func promptYesOrNo(question: String, questionType: QuestionType) -> Bool {
 		return true
 	}
 
-	var reply: String? = nil
+	var reply: String?
 
 	while reply == nil {
 		reply = readLine()

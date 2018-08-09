@@ -1,7 +1,7 @@
 //  Copyright © 2018 Rui Nelson Magalhães Carneiro. All rights reserved.
 
-import Foundation
 import Darwin
+import Foundation
 
 func glob(pattern: String) -> [String] {
 	let globFlags: Int32 = GLOB_MARK | GLOB_NOESCAPE | GLOB_BRACE | GLOB_NOMAGIC | GLOB_TILDE

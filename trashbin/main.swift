@@ -1,7 +1,7 @@
 //  Copyright © 2018 Rui Nelson Magalhães Carneiro. All rights reserved.
 
-import Foundation
 import Darwin
+import Foundation
 
 enum ExitCodes: Int32 {
 	case normal = 0

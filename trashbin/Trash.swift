@@ -93,7 +93,7 @@ private func overwriteFile(_ url: URL, pattern: UInt8) throws {
 	fh.seek(toFileOffset: 0)
 	assert(fh.offsetInFile == 0)
 
-	let blockSize: Int64 = 1000000
+	let blockSize: Int64 = 1_000_000
 	let blocks = size / blockSize
 	let remaining = size - (blocks*blockSize)
 
