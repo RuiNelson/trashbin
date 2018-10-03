@@ -23,7 +23,7 @@ func listTrashBin() -> Int64? {
 		return nil
 	}
 
-	print("Trash contents:")
+	print("Trash content:")
 	for content in contents {
 		var size: Int64?
 
