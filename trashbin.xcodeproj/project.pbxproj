@@ -33,6 +33,7 @@
 		520F92F720B6F907007E6B55 /* ListAndEmpty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListAndEmpty.swift; sourceTree = "<group>"; };
 		523BEF7F20B3330C0001EF4E /* CollectFiles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectFiles.swift; sourceTree = "<group>"; };
 		523BEF8120B3338F0001EF4E /* Trash.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trash.swift; sourceTree = "<group>"; };
+		52837A9B21C61190005EACE4 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		5284B51F20B2DE810024E186 /* trashbin */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = trashbin; sourceTree = BUILT_PRODUCTS_DIR; };
 		5284B52220B2DE810024E186 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		5284B53120B307340024E186 /* Options.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Options.swift; sourceTree = "<group>"; };
@@ -55,6 +56,7 @@
 		5284B51620B2DE800024E186 = {
 			isa = PBXGroup;
 			children = (
+				52837A9B21C61190005EACE4 /* README.md */,
 				5284B52120B2DE810024E186 /* trashbin */,
 				5284B52020B2DE810024E186 /* Products */,
 			);

@@ -64,7 +64,7 @@ class Options {
 			ExitCodes.badSyntax.exit()
 		}
 		if overwrite && !unlink {
-			printError("For the overwrite option to be valid, the unlink (-u) option must also be used.")
+			printError("For the overwrite (-P) option to be valid, the unlink (-u) option must also be used.")
 			ExitCodes.overwriteWithoutUnlink.exit()
 		}
 		if overwrite && directories {

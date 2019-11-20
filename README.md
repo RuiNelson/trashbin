@@ -6,10 +6,9 @@
 
 ## Synopsis
 
-You can use `trashbin` in the same form and syntax as `rm`. Additionally, there are some new
-options related to macOS's trash bin management listed in the next section (**-l** and **-e**). This
-utility is designed for all those who want a "safety net" for deleting files through the
-command line.
+You can use `trashbin` in the same form and syntax as `rm` to move files or directories to the Trash of macOS.
+Additionally, there are some new options related to macOS's Trash management listed in the next section (**-l** and **-e**).
+This utility is designed for all those who want a "safety net" for deleting files through the command line.
 
     trashbin [-f | -i] [-dRrsvW] file ... [-el]
     send file(s) to the trash (or unlink them with the u option)

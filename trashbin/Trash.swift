@@ -95,7 +95,7 @@ private func overwriteFile(_ url: URL, pattern: UInt8) throws {
 
 	let blockSize: Int64 = 1_000_000
 	let blocks = size / blockSize
-	let remaining = size - (blocks*blockSize)
+	let remaining = size - (blocks * blockSize)
 
 	var block = Data(capacity: Int(blockSize))
 	for _ in 0..<blockSize {
