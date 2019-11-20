@@ -11,7 +11,6 @@ class Options {
 	var verbose = false
 	var undelete = false
 	var unlink = false
-	var overwrite = false
 	var showSize = false
 	var listTrash = false
 
@@ -40,7 +39,7 @@ class Options {
 			case "l":
 				listTrash = true
 			case "P":
-				overwrite = true
+				()
 			case "R", "r":
 				recursive = true
 				directories = true

@@ -81,40 +81,6 @@ func execute(_ urls: [URL]) -> Int64? {
 	return options.showSize ? total : nil
 }
 
-private func overwriteFile(_ url: URL) throws {
-	try overwriteFile(url, pattern: 0xFF)
-	try overwriteFile(url, pattern: 0x00)
-	try overwriteFile(url, pattern: 0xFF)
-}
-
-private func overwriteFile(_ url: URL, pattern: UInt8) throws {
-	let size = Constants.fileManager.sizeOfFile(atPath: url.path)
-	let fh = try FileHandle(forWritingTo: url)
-	fh.seek(toFileOffset: 0)
-	assert(fh.offsetInFile == 0)
-
-	let blockSize: Int64 = 1_000_000
-	let blocks = size / blockSize
-	let remaining = size - (blocks * blockSize)
-
-	var block = Data(capacity: Int(blockSize))
-	for _ in 0..<blockSize {
-		block.append(pattern)
-	}
-
-	let byte = Data(bytes: [pattern])
-
-	for _ in 0..<blocks {
-		fh.write(block)
-	}
-	for _ in 0..<remaining {
-		fh.write(byte)
-	}
-
-	fh.synchronizeFile()
-	fh.closeFile()
-}
-
 private func canExecute(_ url: URL) -> Bool {
 	if options.force {
 		return true
@@ -154,10 +120,6 @@ func execute(_ url: URL) -> Int64 {
 				fileInfoPrint(path: url.path,
 							  size: size,
 							  emoji: (options.unlink ? "🔗" : "🗑 "))
-			}
-
-			if options.overwrite {
-				try overwriteFile(url)
 			}
 
 			if options.unlink {

@@ -28,8 +28,6 @@ The options are as follows:
 
 **-i**  Request confirmation before attempting to trash/unlink each file, regardless of the file's permissions, or whether or not the standard input device is a terminal. The -i option overrides any previous -f options.
 
-**-P**  Overwrite files before deleting them.  Files are overwritten three times, first with the byte pattern 0xff, then 0x00, and then 0xff again, before they are deleted. Must be used in combination with **-u** and not with **-d** or **-r**
-
 **-l**  List all files in the trash.
 
 **-r**  Attempt to trash directories as well files even if they aren't empty.
