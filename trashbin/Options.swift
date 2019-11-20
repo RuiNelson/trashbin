@@ -62,15 +62,6 @@ class Options {
 			printError("Sorry, but this utility can't undelete files. You can use your macOS's trash bin to do that.")
 			ExitCodes.badSyntax.exit()
 		}
-		if overwrite && !unlink {
-			printError("For the overwrite (-P) option to be valid, the unlink (-u) option must also be used.")
-			ExitCodes.overwriteWithoutUnlink.exit()
-		}
-		if overwrite && directories {
-			printError("The overwrite (-P) option is mutually exclusive with" +
-				       "the directories (-d) and recursive (-r) options.")
-			ExitCodes.mutualExclusiveOptions.exit()
-		}
 		if interactive && force {
 			printError("Options 'interactive' and 'force' are mutually exclusive.")
 			ExitCodes.mutualExclusiveOptions.exit()
