@@ -66,6 +66,14 @@ extension FileManager {
 		}
 		return 0
 	}
+	
+	func contentsOfDirectoryWithPath(atPath: String) throws -> [String] {
+		let contentsWithoutPath = try self.contentsOfDirectory(atPath: atPath)
+		let path = atPath.hasSuffix("/") ? atPath : atPath + "/"
+		let contentsWithPath = contentsWithoutPath.map({ return path + $0 })
+		return contentsWithPath
+	}
+
 
 	func sizeOfDirectory(atPath: String) -> Int64 {
 		if let children = try? subpathsOfDirectory(atPath: atPath) {
