@@ -4,6 +4,7 @@ import Foundation
 
 var userEnteredFiles = false
 
+/// Returns an URL array with all the files speccified in the command line
 func collectFiles() -> [URL] {
 	let currentPath = Constants.fileManager.currentDirectoryPath
 	let currentPathURL = URL(fileURLWithPath: currentPath, isDirectory: true)
