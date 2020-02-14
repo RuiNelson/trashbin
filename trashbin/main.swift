@@ -15,7 +15,7 @@ if !fileUrls.isEmpty {
 	if userEnteredFiles {
 		Constants.ExitCodes.noSuchFileOrDirectory.exit()
 	} else {
-		Constants.ExitCodes.badSyntax.exit()
+		                         Constants.ExitCodes.badSyntax.exit()
 	}
 }
 
