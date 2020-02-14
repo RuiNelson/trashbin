@@ -13,7 +13,7 @@ func glob(pattern: String, globFlags: Int32) -> [String] {
         return glob(pattern, flags, nil, globType)
     }
 
-    var globType = glob_t()
+var globType = glob_t()
     let pattern = strdup(pattern)!
 
     var result: [String] = []
