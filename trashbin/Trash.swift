@@ -26,7 +26,6 @@ private func checkPreExecution(_ url: URL) -> CheckPreExecuteResult {
 	if let ownerWritable = try? Constants.fileManager
 		.itemPermissions(atPath: path)
 		.contains(FileManager.PosixPermission.ownerWritable) {
-
 		if !ownerWritable {
 			return .readOnly
 		}
@@ -119,7 +118,7 @@ func execute(_ url: URL) -> Int64 {
 			if options.verbose {
 				fileInfoPrint(path: url.path,
 							  size: size,
-							  emoji: (options.unlink ? "🔗" : "🗑 "))
+							  emoji: options.unlink ? "🔗" : "🗑 ")
 			}
 
 			if options.unlink {
@@ -138,5 +137,4 @@ func execute(_ url: URL) -> Int64 {
 		print("\(url.path) not \(options.actionPast)")
 		return 0
 	}
-
 }

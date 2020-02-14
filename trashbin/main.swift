@@ -11,7 +11,7 @@ if !fileUrls.isEmpty {
 	if let trashed = trashed {
 		print("Total \(options.actionPast): \(Constants.byteCountFormatter.string(fromByteCount: trashed))")
 	}
-} else if !options.listTrash && !options.emptyOut {
+} else if !options.listTrash, !options.emptyOut {
 	if userEnteredFiles {
 		Constants.ExitCodes.noSuchFileOrDirectory.exit()
 	} else {
