@@ -14,8 +14,7 @@ if !fileUrls.isEmpty {
 } else if !options.listTrash, !options.emptyOut {
 	if userEnteredFiles {
 		Constants.ExitCodes.noSuchFileOrDirectory.exit()
-	} else {
-		                         Constants.ExitCodes.badSyntax.exit()
+	} else { Constants.ExitCodes.badSyntax.exit()
 	}
 }
 
