@@ -19,6 +19,8 @@ if !fileUrls.isEmpty {
 	}
 }
 
+// Extra Functionality
+
 // list trash contents if option is selected
 if options.listTrash {
 	let trashSize = listTrashBin()
