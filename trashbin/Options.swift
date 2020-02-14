@@ -53,18 +53,18 @@ class Options {
                 undelete = true
             default:
                 printError("Unknown option")
-                ExitCodes.badSyntax.exit()
+                Constants.ExitCodes.badSyntax.exit()
             }
         }
 
         // checkup
         if undelete {
             printError("Sorry, but this utility can't undelete files. You can use your macOS's trash bin to do that.")
-            ExitCodes.badSyntax.exit()
+            Constants.ExitCodes.badSyntax.exit()
         }
         if interactive, force {
             printError("Options 'interactive' and 'force' are mutually exclusive.")
-            ExitCodes.mutualExclusiveOptions.exit()
+            Constants.ExitCodes.mutualExclusiveOptions.exit()
         }
     }
 }

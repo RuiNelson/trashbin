@@ -96,6 +96,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 5284B52620B2DE810024E186 /* Build configuration list for PBXNativeTarget "trashbin" */;
 			buildPhases = (
+				52E134E023F6644200A4C0F7 /* ShellScript */,
 				5284B51B20B2DE800024E186 /* Sources */,
 				5284B51C20B2DE800024E186 /* Frameworks */,
 				5284B51D20B2DE800024E186 /* CopyFiles */,
@@ -142,6 +143,26 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		52E134E023F6644200A4C0F7 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nswiftformat . --swiftversion 5\n\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		5284B51B20B2DE800024E186 /* Sources */ = {
